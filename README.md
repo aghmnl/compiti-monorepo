@@ -1,162 +1,84 @@
-# Task Management Application (Monorepo)
+# Turborepo starter
 
-## Overview
+This Turborepo starter is maintained by the Turborepo core team.
 
-This repository contains a **Task Management Application** built using a monorepo structure managed by **Turborepo**. The application allows users to manage a list of tasks with the following fields:
+## Using this example
 
-- **id**: Auto-incremental identifier.
-- **title**: Required string field.
-- **description**: Optional string field.
-- **status**: Enum with values: `pending`, `in progress`, `done`.
+Run the following command:
 
-This monorepo includes both the client-side and server-side code for the application.
+```sh
+npx create-turbo@latest
+```
 
-## Technology Stack
+## What's inside?
 
-The application utilizes the following technologies:
+This Turborepo includes the following packages/apps:
 
-- **Monorepo Management**:
-  - Turborepo
-- **Frontend (Client)**:
-  - Next.js (App Router, TypeScript)
-  - shadcn/ui (UI Components)
-  - Clerk (Authentication)
-- **Backend (Server)**:
-  - Node.js
-  - Prisma (ORM with SQLite or PostgreSQL)
-- **API & Communication**:
-  - tRPC
-- **Validation**:
-  - Zod (Client & Server)
-- **Development Tools**:
-  - TypeScript
-  - npm
+### Apps and Packages
 
-## Features
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-The application includes the following functionalities:
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-- **Task Management**:
-  - Create a new task.
-  - View the list of tasks.
-  - Edit an existing task.
-  - Delete a task.
-- **Validation**:
-  - Client-side and Server-side validation using Zod.
-- **User Interface**:
-  - A clean and responsive UI built with shadcn/ui.
-- **Authentication**:
-  - User authentication using Clerk.
-- **Architecture**:
-  - Modular component structure (Client).
-  - Modular structure for API routes and validations (Server).
-  - Efficient build and development workflows powered by Turborepo.
+### Utilities
 
-## Monorepo Structure
+This Turborepo has some additional tools already setup for you:
 
-This repository uses Turborepo to manage the workspaces. You'll typically find the code organized into directories like:
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-- `apps/client`: Contains the Next.js frontend application.
-- `apps/server`: Contains the Node.js/tRPC backend application.
-- `packages/*`: May contain shared code, configurations (like `tsconfig`, `eslint`), or UI components used across applications.
+### Build
 
-## Installation and Local Setup
+To build all apps and packages, run the following command:
 
-Follow these steps to install and run the application locally:
+```
+cd my-turborepo
+pnpm build
+```
 
-### Prerequisites
+### Develop
 
-- Node.js
-- npm
+To develop all apps and packages, run the following command:
 
-### Steps
+```
+cd my-turborepo
+pnpm dev
+```
 
-1.  **Clone the repository**
+### Remote Caching
 
-    ```bash
-    git clone https://github.com/aghmnl/compiti-monorepo.git
-    cd compiti-monorepo
-    ```
+> [!TIP]
+> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
 
-2.  **Install dependencies**
+Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-    Install dependencies from the root of the monorepo. This will install dependencies for all workspaces (client, server, packages).
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
 
-    ```bash
-    npm install
-    ```
+```
+cd my-turborepo
+npx turbo login
+```
 
-3.  **Set up environment variables**
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-- Navigate to the server application directory `apps/server` and create a `.env` file.
-- Add the database connection string:
-  `env
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-  ```bash
-  # In apps/server/.env
-  DATABASE_URL="file:./dev.db"
-  ```
+```
+npx turbo link
+```
 
-- Navigate to the client application directory (e.g., `apps/client`) and create a `.env` file.
-- Add your Clerk and server URL variables:
+## Useful Links
 
-  ```bash
-  # In apps/client/.env
-  NEXT*PUBLIC_CLERK_PUBLISHABLE_KEY="your-clerk-publishable-key"
-  CLERK_SECRET_KEY="your-clerk-secret-key"
-  NEXT_PUBLIC_SERVER_URL="http://localhost:4000"
-  ```
+Learn more about the power of Turborepo:
 
-  > Note: Refer to Clerk documentation for the specific environment variables required.
-
-4.  **Set up the database**
-
-    Run Prisma migrations to create the database schema. You might need to run this command from the root or specify the server workspace depending on your Turborepo setup. A common way is:
-
-    ```bash
-    # Example using pnpm from the root, targeting the 'server' app's 'prisma:migrate' script
-    # Adjust the command based on your package manager and package.json scripts
-    pnpm --filter server run prisma:migrate
-
-    # Or navigate to the server directory and run directly
-    # cd apps/server
-    # npx prisma migrate dev
-    # cd ../..
-    ```
-
-    _Ensure you have a `prisma:migrate` script (e.g., `"prisma:migrate": "prisma migrate dev"`) in your `apps/server/package.json`._
-
-5.  **Run the development servers**
-
-    Use Turborepo to run the development servers for both the client and server concurrently.
-
-    ```bash
-    # This command assumes you have a "dev" script defined in the root package.json
-    # that Turborepo uses to run the "dev" scripts in each app (`client` and `server`).
-    npm run dev
-    ```
-
-6.  **Access the application**
-
-    - The client application should be available at `http://localhost:3000`.
-    - The server API endpoint (used by the client via tRPC) will be running on `http://localhost:4000`.
-
-## Documentation Used
-
-The following official documentation was referenced during the development process:
-
-- [Turborepo Documentation](https://turborepo.com/docs)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com/docs)
-- [Clerk Documentation](https://clerk.dev/docs)
-- [tRPC Documentation](https://trpc.io/docs)
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [Zod Documentation](https://zod.dev)
-
-## Contributing
-
-Feel free to fork this repository and submit pull requests for improvements or bug fixes. Please ensure your changes align with the project structure and coding standards.
-
-## License
-
-This project is licensed under the [MIT License](https://opensource.org/license/mit).
+- [Tasks](https://turborepo.com/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turborepo.com/docs/core-concepts/caching)
+- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
+- [Filtering](https://turborepo.com/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turborepo.com/docs/reference/configuration)
+- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
