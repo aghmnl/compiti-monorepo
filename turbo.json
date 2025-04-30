@@ -4,11 +4,16 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "inputs": ["src/**/*", "prisma/**/*", "package.json", "tsconfig.json"],
+      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
     },
     "check-types": {
       "dependsOn": ["^check-types"]
@@ -16,6 +21,12 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "prisma": {
+      "outputs": ["prisma/schema.prisma", "prisma/migrations/**"]
+    },
+    "prisma:generate": {
+      "cache": false
     }
   }
 }
